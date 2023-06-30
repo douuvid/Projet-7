@@ -1,13 +1,9 @@
-# #1) commencer par la formule cout + interet
 
-# def formule___(cout: int, benef: float):
-#     i = 1
-#     benef = 1 + benef / 100  # Convert the percentage benefit to a decimal value
-#     result = cout * benef
+"""
+Ceux.py se contente de trier le dictipnnaire 
+"""
 
-#     return f"L'action-{i} vaut : {result}"
 
-# print(formule___(20, 5))
 
 actions =[
   {"name":"Action-1" ,"cost" : 20, "benefice" : 5 },
@@ -43,42 +39,46 @@ max_budget = 500
 
 def formule(actions):
     results = []
+    differences = [] 
+    
     i = 1
     for action in actions:
         cost = action["cost"]
         benefit = action["benefice"]
         value = round(cost * (1 + benefit / 100), 2)
-        result = f"L'action-{i} avec un cout : {cost}, à une valeur de : {value} après {benefit}%"
+        difference = round(value - cost,2)
+        result = f"L'action-{i} avec un cout : {cost}, à une valeur de : {value}  avec un taux : {benefit}%, pour un interet de {difference} euro"
+        
         results.append(result)
+        differences.append(difference)
         i += 1
-    return results
+    return results, differences
 
 
-def action_plus_chere(actions, max_budget):
-    resultat_action_plus_chere = []
+def action_plus_chere_avec_budget(actions, max_budget):
+    resultat_action_plus_chere_avec_budget = []
     resultats = formule(actions)
-    actions_triees = sorted(resultats, key=lambda x: float(x.split("valeur de : ")[1].split(" ")[0]), reverse=True)
+    actions_triees = sorted(resultats[0], key=lambda x: float(x.split("valeur de : ")[1].split(" ")[0]), reverse=True)
+
     total_budget = 0
 
     for resultat in actions_triees:
         valeur_action = float(resultat.split("valeur de : ")[1].split(" ")[0])
         if total_budget + valeur_action <= max_budget:
             resultat_formate = resultat.ljust(30)
-            resultat_action_plus_chere.append(resultat_formate)
+            resultat_action_plus_chere_avec_budget.append(resultat_formate)
             total_budget += valeur_action
         else:
             break
 
-    return resultat_action_plus_chere
+    return resultat_action_plus_chere_avec_budget
 
 
-
-
-
-def action_moins_chere(actions, max_budget):
+def action_moins_chere_avec_budget(actions, max_budget):
     resultat_action_moins_chere = []
     resultats = formule(actions)
-    actions_triees = sorted(resultats, key=lambda x: float(x.split("valeur de : ")[1].split(" ")[0]))
+    actions_triees = sorted(resultats[0], key=lambda x: float(x.split("valeur de : ")[1].split(" ")[0]), reverse=True)
+
     total_budget = 0
 
     for resultat in actions_triees:
@@ -91,9 +91,7 @@ def action_moins_chere(actions, max_budget):
             break
     
     return resultat_action_moins_chere
-print(f"La liste des actions les moins chères pour un budget de {max_budget} euros :")
-print("")
-print(action_moins_chere(actions, max_budget))
+
 
 
 
@@ -115,15 +113,15 @@ def action_moins_benef(actions):
 
 # Liste des actions les plus chères en fonction du budget
 print(f"La liste des actions les plus chères pour un budget de {max_budget} euros :")
-actions_plus_cheres = action_plus_chere(actions, max_budget)
+actions_plus_cheres = action_plus_chere_avec_budget(actions, max_budget)
 for action in actions_plus_cheres:
     print(action)
 
-print("\nNombre d'actions pas chères :", len(actions_plus_cheres))
+print("\nNombre d'actions  chères :", len(actions_plus_cheres))
 
 # Liste des actions les moins chères en fonction du budget
 print(f"\nLa liste des actions les moins chères pour un budget de {max_budget} euros :")
-actions_moins_cheres = action_moins_chere(actions, max_budget)
+actions_moins_cheres = action_moins_chere_avec_budget(actions, max_budget)
 for action in actions_moins_cheres:
     print(action)
 
