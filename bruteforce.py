@@ -34,6 +34,10 @@ actions =[
 ]
 max_budget = 500
 
+
+"""
+Calcile le cout de la fonction apres 2 ans 
+"""
 def formule(actions):
     results = []
     i = 1
@@ -51,8 +55,76 @@ def formule(actions):
 results = formule(actions)
 sorted_results = sorted(results, key=lambda x: float(x.split("vaut : ")[1].split(" ")[0]), reverse=True)
 
-for result in sorted_results:
-    print(result)
+# for result in sorted_results:
+#     print(result)
+
+###Methode avec les action les plus chere 
+
+
+        
+def action_plus_chere(actions, max_budget):
+    resultat_action_plus_chere = []
+    resultats = formule(actions)
+    actions_triees = sorted(resultats, key=lambda x: float(x.split("vaut : ")[1].split(" ")[0]), reverse=True)
+    total_budget = 0
+
+    for resultat in actions_triees:
+        valeur_action = float(resultat.split("vaut : ")[1].split(" ")[0])
+        if total_budget + valeur_action <= max_budget:
+            resultat_formate = resultat.ljust(50)
+            resultat_action_plus_chere.append(resultat_formate)
+            total_budget += valeur_action
+        else:
+            break
+
+    return resultat_action_plus_chere
+
+print(f"La liste des actions les plus chere en fonction du budget de :  {max_budget} euro")
+print("")
+
+print(action_plus_chere(actions, max_budget))
+
+action_cher=len(action_plus_chere(actions, max_budget))
+print("Nombre d'actions pas chères : ", action_cher)
+
+
+
+###Methode avec les action les moins chere 
+def action_moins_chere(actions, max_budget):
+    resultat_action_moins_chere = []
+    
+    resultats = formule(actions)
+    actions_triees = sorted(resultats, key=lambda x: float(x.split("vaut : ")[1].split(" ")[0]))
+    total_budget = 0
+
+    for resultat in actions_triees:
+        valeur_action = float(resultat.split("vaut : ")[1].split(" ")[0])
+        if total_budget + valeur_action <= max_budget:
+            resultat_formate = resultat.ljust(50)
+            
+            resultat_action_moins_chere.append(resultat_formate)
+            
+            total_budget += valeur_action
+            
+        else:
+            break
+    
+    return resultat_action_moins_chere
+
+# print(f"La liste des actions les moins chere en fonction du budget de :  {max_budget} euro")
+# print("")
+
+# print(action_moins_chere(actions, max_budget))
+
+# x=len(action_moins_chere(actions, max_budget))
+# print("Nombre d'actions pas chères : ", x)
+
+
+
+
+###Methode avec les benef les plus eleve
+
+###Methode avec les action les moins  eleve  
 
 
     
