@@ -2,6 +2,10 @@
 """
 Ceux.py se contente de trier le dictipnnaire 
 """
+from bruteforce import open_csv
+
+csv_="/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/data/datas_1.csv"
+open_csv(csv_)
 
 
 
@@ -28,7 +32,7 @@ actions =[
   {"name":"Action-20" , "cost" : 114,"benefice" : 18 }
     
 ]
-max_budget = 500
+
 
 
 """
@@ -109,6 +113,15 @@ def action_moins_benef(actions):
     for action in actions_triees:
         resultat_action_moins_benef.append(f"L'action-{action['name']} a un bénéfice de {action['benefice']}%")
     return resultat_action_moins_benef
+
+
+
+def calcul_rentabilite_action(prix_initial, taux_interet):
+    benefice = prix_initial * (1 + taux_interet) ** 2 - prix_initial
+    return benefice
+
+
+
 
 
 # Liste des actions les plus chères en fonction du budget

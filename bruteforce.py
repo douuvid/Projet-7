@@ -9,6 +9,37 @@
 
 # print(formule___(20, 5))
 
+import csv
+
+
+
+def open_csv(csv_path):
+    with open(csv_path, 'r') as fichier:
+        lecteur_csv = csv.reader(fichier)
+        result = []
+        next(lecteur_csv)  # Saute la première ligne (en-têtes)
+        for action in lecteur_csv:
+            name = action[0]
+            cost = float(action[1])
+            print(f"{name} : {cost}")
+            result.append((name, cost))
+        print("Fichier 1 : datas_1")
+        return result
+
+
+csv_ = ["datas_1", "datas_2"]
+resultats = []
+
+for csv_name in csv_:
+    print(f"Lecture du fichier : {csv_name}")
+    csv_path = f"/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/data/{csv_name}.csv"
+    
+    result = open_csv(csv_path)
+    resultats.append((csv_name, result))
+
+
+
+
 actions =[
   {"name":"Action-1" ,"cost" : 20, "benefice" : 5 },
   {"name":"Action-2" ,"cost" : 30, "benefice" : 10 }, 
@@ -62,8 +93,8 @@ sorted_results = sorted(results, key=lambda x: float(x.split("vaut : ")[1].split
 
 
         
-def action_plus_chere(actions, max_budget):
-    resultat_action_plus_chere = []
+def action_plus_chere_avec_budget(actions, max_budget):
+    resultat_action_plus_chere_avec_budget = []
     resultats = formule(actions)
     actions_triees = sorted(resultats, key=lambda x: float(x.split("vaut : ")[1].split(" ")[0]), reverse=True)
     total_budget = 0
@@ -72,19 +103,19 @@ def action_plus_chere(actions, max_budget):
         valeur_action = float(resultat.split("vaut : ")[1].split(" ")[0])
         if total_budget + valeur_action <= max_budget:
             resultat_formate = resultat.ljust(30)
-            resultat_action_plus_chere.append(resultat_formate)
+            resultat_action_plus_chere_avec_budget.append(resultat_formate)
             total_budget += valeur_action
         else:
             break
 
-    return resultat_action_plus_chere
+    return resultat_action_plus_chere_avec_budget
 
 print(f"La liste des actions les plus chere en fonction du budget de :  {max_budget} euro")
 print("")
 
-print(action_plus_chere(actions, max_budget))
+print(action_plus_chere_avec_budget(actions, max_budget))
 
-action_cher=len(action_plus_chere(actions, max_budget))
+action_cher=len(action_plus_chere_avec_budget(actions, max_budget))
 print("Nombre d'actions pas chères : ", action_cher)
 
 
