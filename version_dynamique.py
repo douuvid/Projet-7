@@ -1,13 +1,65 @@
 from itertools import combinations
 
-actions = [
-    {"name": "Action-1", "cost": 20, "benefice": 5, "quantité": 1},
-    {"name": "Action-2", "cost": 30, "benefice": 10, "quantité": 1},
-    {"name": "Action-3", "cost": 50, "benefice": 15, "quantité": 1},
+actions =[
+  {"name":"Action-1" ,"cost" : 20, "benefice" : 5 },
+  {"name":"Action-2" ,"cost" : 30, "benefice" : 10 }, 
+  {"name":"Action-3" ,"cost" : 50,"benefice" : 15 },
+  {"name":"Action-4" ,"cost" : 70,"benefice" : 20 },
+  {"name":"Action-5" ,"cost" : 60,"benefice" : 17 },
+  {"name":"Action-6" ,"cost" : 80,"benefice" : 25 },
+  {"name":"Action-7" ,"cost" : 22,"benefice" : 7 },
+  {"name":"Action-8" ,"cost" : 26,"benefice" : 11 },
+  {"name":"Action-9" ,"cost" : 48,"benefice" : 13 },
+  {"name":"Action-10" ,"cost" : 34,"benefice" : 27 },
+  {"name":"Action-11" ,"cost" : 42,"benefice" : 17 },
+  {"name":"Action-12" ,"cost" : 110, "benefice" : 9 },
+  {"name":"Action-13" ,"cost" : 38, "benefice" : 23 },
+  {"name":"Action-14" ,"cost" : 14,"benefice" : 1 },
+  {"name":"Action-15" ,"cost" : 18,"benefice" : 3 },
+  {"name":"Action-16" ,"cost" : 8,"benefice" : 8 },
+  {"name":"Action-17" ,"cost" : 4,"benefice" : 12 },
+  {"name":"Action-18" ,"cost" : 10,"benefice" : 14 },
+  {"name":"Action-19" ,"cost" : 24,"benefice" : 21 },
+  {"name":"Action-20" , "cost" : 114,"benefice" : 18 }
+    
 ]
 
-budget = 50
+budget = 350
 
+
+"""
+Approches utilisées:
+
+Le code utilise une approche dynamique pour trouver la meilleure combinaison.
+Il crée une matrice dp de dimensions (n+1) x (budget+1), où n est le nombre d'actions. 
+La valeur dp[i][j] représente le bénéfice maximal atteignable avec les i premières actions et un budget de j.
+
+
+Le code parcourt ensuite cette matrice pour remplir les valeurs de manière itérative. 
+Pour chaque action, il compare deux cas : soit l'action est exclue, auquel cas le bénéfice 
+reste le même que pour les i-1 premières actions, soit l'action est incluse, auquel cas
+le bénéfice est augmenté du bénéfice de cette action et du bénéfice maximal atteignable 
+avec les i-1 premières actions et un budget réduit de son coût.
+
+Une fois que la matrice dp est remplie, le code détermine le bénéfice maximal 
+atteignable et les actions correspondantes en remontant dans la matrice.
+Il construit la meilleure combinaison en ajoutant les actions qui ont contribué 
+au bénéfice maximal, et calcule également le budget restant.
+
+Ensuite, le code utilise une approche de force brute pour trouver toutes
+les combinaisons possibles d'actions et calcule leur coût total et leur 
+bénéfice total. Il génère une liste de tuples contenant chaque combinaison,
+son coût total et son bénéfice total. Cette approche de force brute peut être
+coûteuse en termes de temps de calcul, en particulier lorsque le nombre d'actions est élevé.
+
+Enfin, le code imprime la meilleure combinaison trouvée avec le budget donné,
+ainsi que le bénéfice total et le budget restant. Il affiche également le nombre 
+total de combinaisons possibles (commenté dans le code), ainsi que toutes les
+combinaisons possibles avec leur coût total, leur bénéfice total et la répartition des actions.
+    """
+    
+    
+######
 def find_best_combination(actions, budget):
     n = len(actions)
     dp = [[0] * (budget + 1) for _ in range(n + 1)]
