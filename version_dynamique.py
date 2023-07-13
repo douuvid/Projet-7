@@ -24,7 +24,17 @@ actions =[
     
 ]
 
-budget = 350
+budget = 200
+
+total = 0
+benefiii =0
+for action in actions:
+    total += action["cost"]
+    benefiii += action["benefice"]
+    
+
+print( f"Le cout de toute les actions represente : {total}")
+print(f"La valeur  de tous les benef represente : {benefiii}")
 
 
 """
@@ -59,7 +69,7 @@ combinaisons possibles avec leur coût total, leur bénéfice total et la répar
     """
     
     
-######
+########
 def find_best_combination(actions, budget):
     n = len(actions)
     dp = [[0] * (budget + 1) for _ in range(n + 1)]
@@ -93,29 +103,38 @@ def brute_force(actions, budget):
     if not actions:
         return None
 
-    all_combinations = []
+   #all_combinations = []
+    best_combination = None
+    nb_combi = 0
 
     for r in range(1, len(actions) + 1):
         for combination in combinations(actions, r):
             total_cost = sum(action["cost"] for action in combination)
+            nb_combi += 1
             total_benefit = sum(action["benefice"] for action in combination)
-            if total_cost <= budget:
-                all_combinations.append((combination, total_cost, total_benefit))
+            if total_cost <= budget and (best_combination is None or  total_benefit >= best_combination [2]):
+                best_combination = (combination, total_cost, total_benefit,nb_combi)
+                #all_combinations.append((combination, total_cost, total_benefit))
 
-    return all_combinations
+    return best_combination, nb_combi
 
 
-best_combination, best_benefit, remaining_budget = find_best_combination(actions, budget)
 
-print("Meilleure combinaison avec un budget de", budget, ":")
-for action in best_combination:
-    print(action["name"], end=" ")
-print()
-print("Bénéfice total :", best_benefit)
-print("Montant restant dans le budget :", remaining_budget)
+#best_combination, best_benefit, remaining_budget = find_best_combination(actions, budget)
 
-all_combinations = brute_force(actions, budget)
-print(f"Nombre de combinaisons possibles : {len(all_combinations)}")
+# print("Meilleure combinaison avec un budget de", budget, ":")
+# for action in best_combination:
+#     print(action["name"], end=" ")
+# print()
+# print("Bénéfice total :", best_benefit)
+# print("Montant restant dans le budget :", remaining_budget)
+
+best_combination, nb_combi = brute_force(actions, budget)
+print(f"Nombre de combinaisons possibles : {nb_combi}")
+
+print("ici")
+
+print(f"La meileur combiansaison est la numeros {best_combination[3]}:  \n {best_combination[0]}")
 # print("Toutes les combinaisons possibles :")
 # for i, (combination, total_cost, total_benefit) in enumerate(all_combinations, 1):
 #     print(f"Combinaison {i} : {combination}")
