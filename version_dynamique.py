@@ -1,99 +1,6 @@
 from itertools import combinations
-
-actions =[
-  {"name":"Action-1" ,"cost" : 20, "benefice" : 5 },
-  {"name":"Action-2" ,"cost" : 30, "benefice" : 10 }, 
-  {"name":"Action-3" ,"cost" : 50,"benefice" : 15 },
-  {"name":"Action-4" ,"cost" : 70,"benefice" : 20 },
-  {"name":"Action-5" ,"cost" : 60,"benefice" : 17 },
-  {"name":"Action-6" ,"cost" : 80,"benefice" : 25 },
-  {"name":"Action-7" ,"cost" : 22,"benefice" : 7 },
-  {"name":"Action-8" ,"cost" : 26,"benefice" : 11 },
-  {"name":"Action-9" ,"cost" : 48,"benefice" : 13 },
-  {"name":"Action-10" ,"cost" : 34,"benefice" : 27 },
-  {"name":"Action-11" ,"cost" : 42,"benefice" : 17 },
-  {"name":"Action-12" ,"cost" : 110, "benefice" : 9 },
-  {"name":"Action-13" ,"cost" : 38, "benefice" : 23 },
-  {"name":"Action-14" ,"cost" : 14,"benefice" : 1 },
-  {"name":"Action-15" ,"cost" : 18,"benefice" : 3 },
-  {"name":"Action-16" ,"cost" : 8,"benefice" : 8 },
-  {"name":"Action-17" ,"cost" : 4,"benefice" : 12 },
-  {"name":"Action-18" ,"cost" : 10,"benefice" : 14 },
-  {"name":"Action-19" ,"cost" : 24,"benefice" : 21 },
-  {"name":"Action-20" , "cost" : 114,"benefice" : 18 }
-    
-]
-
-budget = 200
-
-total = 0
-benefiii =0
-for action in actions:
-    total += action["cost"]
-    benefiii += action["benefice"]
-    
-
-print( f"Le cout de toute les actions represente : {total}")
-print(f"La valeur  de tous les benef represente : {benefiii}")
-
-
-"""
-Approches utilisées:
-
-Le code utilise une approche dynamique pour trouver la meilleure combinaison.
-Il crée une matrice dp de dimensions (n+1) x (budget+1), où n est le nombre d'actions. 
-La valeur dp[i][j] représente le bénéfice maximal atteignable avec les i premières actions et un budget de j.
-
-
-Le code parcourt ensuite cette matrice pour remplir les valeurs de manière itérative. 
-Pour chaque action, il compare deux cas : soit l'action est exclue, auquel cas le bénéfice 
-reste le même que pour les i-1 premières actions, soit l'action est incluse, auquel cas
-le bénéfice est augmenté du bénéfice de cette action et du bénéfice maximal atteignable 
-avec les i-1 premières actions et un budget réduit de son coût.
-
-Une fois que la matrice dp est remplie, le code détermine le bénéfice maximal 
-atteignable et les actions correspondantes en remontant dans la matrice.
-Il construit la meilleure combinaison en ajoutant les actions qui ont contribué 
-au bénéfice maximal, et calcule également le budget restant.
-
-Ensuite, le code utilise une approche de force brute pour trouver toutes
-les combinaisons possibles d'actions et calcule leur coût total et leur 
-bénéfice total. Il génère une liste de tuples contenant chaque combinaison,
-son coût total et son bénéfice total. Cette approche de force brute peut être
-coûteuse en termes de temps de calcul, en particulier lorsque le nombre d'actions est élevé.
-
-Enfin, le code imprime la meilleure combinaison trouvée avec le budget donné,
-ainsi que le bénéfice total et le budget restant. Il affiche également le nombre 
-total de combinaisons possibles (commenté dans le code), ainsi que toutes les
-combinaisons possibles avec leur coût total, leur bénéfice total et la répartition des actions.
-    """
-    
-    
-########
-def find_best_combination(actions, budget):
-    n = len(actions)
-    dp = [[0] * (budget + 1) for _ in range(n + 1)]
-
-    for i in range(1, n + 1):
-        for j in range(1, budget + 1):
-            if actions[i - 1]["cost"] > j:
-                dp[i][j] = dp[i - 1][j]
-            else:
-                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - actions[i - 1]["cost"]] + actions[i - 1]["benefice"])
-
-    best_benefit = dp[n][budget]
-    remaining_budget = budget
-    best_combination = []
-
-    i, j = n, budget
-    while i > 0 and j > 0:
-        if dp[i][j] != dp[i - 1][j]:
-            best_combination.append(actions[i - 1])
-            remaining_budget -= actions[i - 1]["cost"]
-            j -= actions[i - 1]["cost"]
-        i -= 1
-
-    return best_combination, best_benefit, remaining_budget
+import csv
+import logging
 
 
 def brute_force(actions, budget):
@@ -103,45 +10,201 @@ def brute_force(actions, budget):
     if not actions:
         return None
 
-   #all_combinations = []
     best_combination = None
     nb_combi = 0
 
     for r in range(1, len(actions) + 1):
         for combination in combinations(actions, r):
             total_cost = sum(action["cost"] for action in combination)
-            nb_combi += 1
-            total_benefit = sum(action["benefice"] for action in combination)
-            if total_cost <= budget and (best_combination is None or  total_benefit >= best_combination [2]):
-                best_combination = (combination, total_cost, total_benefit,nb_combi)
-                #all_combinations.append((combination, total_cost, total_benefit))
+            total_benefit = sum(action["cost"] *  action["percent_benefit"] / 100 for action in combination)
+            if total_cost <= budget:
+                nb_combi += 1
+                if best_combination is None or total_benefit >= best_combination[2]:
+                    best_combination = (combination, total_cost, total_benefit, nb_combi)
 
-    return best_combination, nb_combi
+    return  best_combination, nb_combi
+
+
+"""
+
+Voir la complexite de sum() et de combinaison
+
+
+combinaison : Dans Python, le module itertools fournit
+une fonction utile appelée combinations. Cette fonction 
+permet de générer toutes les combinaisons possibles d'une 
+séquence donnée en spécifiant la longueur de chaque combinaison.
+
+L18 : Dans cette ligne, nous utilisons une expression de compréhension 
+de liste pour obtenir une liste des coûts de chaque action dans la combinaison.
+Ensuite, nous passons cette liste à la fonction sum() pour obtenir la somme totale des coûts.
+
+
+L19:De manière similaire, nous utilisons une expression de compréhension de liste pour obtenir
+une liste des bénéfices de chaque action dans la combinaison. Nous multiplions le coût de chaque 
+action par son pourcentage de bénéfice, puis nous divisons par 100 pour obtenir la valeur réelle du bénéfice.
+Ensuite, nous passons cette liste à la fonction sum() pour obtenir la somme totale des bénéfices.
+
+Ces calculs nous permettent de déterminer si une combinaison est valide en fonction du budget donné,
+et de comparer les différentes combinaisons pour trouver celle qui a le bénéfice le plus élevé tout 
+en respectant le budget.
 
 
 
-#best_combination, best_benefit, remaining_budget = find_best_combination(actions, budget)
 
-# print("Meilleure combinaison avec un budget de", budget, ":")
-# for action in best_combination:
-#     print(action["name"], end=" ")
-# print()
-# print("Bénéfice total :", best_benefit)
-# print("Montant restant dans le budget :", remaining_budget)
+sum : Dans notre algorithme, nous utilisons la fonction sum() 
+pour calculer la somme des coûts des actions et la somme des 
+bénéfices des actions dans une combinaison donnée
 
-best_combination, nb_combi = brute_force(actions, budget)
-print(f"Nombre de combinaisons possibles : {nb_combi}")
 
-print("ici")
 
-print(f"La meileur combiansaison est la numeros {best_combination[3]}:  \n {best_combination[0]}")
-# print("Toutes les combinaisons possibles :")
-# for i, (combination, total_cost, total_benefit) in enumerate(all_combinations, 1):
-#     print(f"Combinaison {i} : {combination}")
-#     print(f"Coût total : {total_cost}")
-#     print(f"Bénéfice total : {total_benefit}")
-#     print("Répartition des actions :")
-#     for action in combination:
-#         action_budget_percentage = (action['cost'] / total_cost) * 100
-#         print(f"{action['name']}: {action_budget_percentage:.2f}% du budget de : {total_cost} euros")
-#     print()
+
+Derniere partie 
+Chercher les algo pour le probleme sac a dos (ne pas utiliser l'algo glouton)
+Prend l'algo que j'ai le mieux compris +  verifie le temps + savoir l'explique 
+
+
+
+
+Soution Programmation dynamique pour le problème du sac à dos :
+La programmation dynamique consiste à diviser le problème en sous-problèmes plus petits,
+de manière récursive, et à mémoriser les résultats de chaque sous-problème pour éviter de 
+les recalculer à chaque fois. On construit généralement une matrice pour stocker les solutions
+intermédiaires. Cette approche garantit la solution optimale pour le problème du sac à dos, 
+mais peut être plus complexe à mettre en œuvre
+
+
+
+"""
+
+
+
+
+
+def taux_de_rendement(prix_achat, prix_vente):
+    if prix_achat is not None and prix_vente is not None:
+        prix_achat_float = float(prix_achat.replace(',', '.')) 
+        prix_vente_float = float(prix_vente.replace(',', '.')) 
+
+        if prix_achat_float > 0:
+            rendement = ((prix_vente_float - prix_achat_float) / prix_achat_float) * 100
+            if rendement >= 0:
+                return f"Bon rendement chacal : {rendement}"
+            else:
+                return f"Vous avez subi une perte de {abs(rendement):.2f}%"
+        else:
+            return "Rendement impossible à calculer (prix d'achat nul)"
+    else:
+        return "Rendement impossible à calculer (données manquantes)"
+    
+    ##24 juillet 
+    ## Donner coromp faire comme ci exite pas de scase vide 
+    ## Mettre du log ==> si action  vide ou null printe ligne coromp
+    ## https://fr.wikipedia.org/wiki/Probl%C3%A8me_du_sac_%C3%A0_dos
+    ## la cap du sac c'est le budget
+    ##valeur ou poid = cout? a verifier 
+    ## colone = budget entier donc arrondir 
+    ## autant de ligne que d'actions
+    ## imple l'algo wiki sur mon py
+    
+    
+    
+def programmation_dynamique(actions, budget):
+    nombre_actions = len(actions)  # On compte le nombre total d'actions
+
+    # On initialise un tableau pour stocker nos calculs intermédiaires.
+    # Le tableau a (nombre_actions + 1) lignes et (budget + 1) colonnes.
+    # On remplit le tableau avec des zéros.
+    tableau = []
+    for _ in range(nombre_actions + 1):
+        tableau.append([0] * (budget + 1))
+
+    # On parcourt le tableau ligne par ligne
+    for i in range(1, nombre_actions + 1):
+        for c in range(1, budget + 1):
+            # Le coût de l'action actuelle est le coût de l'action à l'index (i - 1) dans la liste des actions
+            cout_action_actuelle = actions[i - 1]["cost"]
+
+            # Le bénéfice de l'action actuelle est le pourcentage de bénéfice de l'action à l'index (i - 1) dans la liste des actions,
+            # multiplié par le coût de cette action
+            benefice_action_actuelle = actions[i - 1]["cost"] * actions[i - 1]["percent_benefit"] / 100
+
+            # Si le coût de l'action actuelle est inférieur ou égal à la capacité actuelle du sac à dos (c)
+            if cout_action_actuelle <= c:
+                # On peut choisir d'inclure l'action actuelle dans le sac à dos.
+                # Si on l'inclut, le bénéfice total est le bénéfice de l'action actuelle, plus le bénéfice total qu'on peut obtenir
+                # avec le reste de la capacité du sac à dos (c - cout_action_actuelle).
+                # Si on n'inclut pas l'action actuelle, le bénéfice total est le même que le bénéfice total de la ligne précédente.
+                tableau[i][c] = max(tableau[i - 1][c], tableau[i - 1][c - cout_action_actuelle] + benefice_action_actuelle)
+            else:
+                # Si le coût de l'action actuelle est supérieur à la capacité actuelle du sac à dos, on ne peut pas inclure l'action actuelle.
+                # Donc, le bénéfice total est le même que le bénéfice total de la ligne précédente.
+                tableau[i][c] = tableau[i - 1][c]
+
+    # Maintenant, on retrouve la meilleure combinaison d'actions.
+    meilleure_combinaison = []
+    c = budget
+    for i in range(nombre_actions, 0, -1):
+        # Si le bénéfice total de la ligne actuelle est différent du bénéfice total de la ligne précédente,
+        # cela signifie que l'action à l'index (i - 1) dans la liste des actions a été incluse dans la meilleure combinaison.
+        if tableau[i][c] != tableau[i - 1][c]:
+            meilleure_combinaison.append(actions[i - 1])
+            c -= actions[i - 1]["cost"]
+
+    return meilleure_combinaison, tableau[nombre_actions][budget]
+
+
+    
+
+def calculer_taux_de_rendement_fichier_csv(nom_fichier):
+    with open(nom_fichier, newline='') as csvfile:
+        # Spécifier manuellement les noms des colonnes avec fieldnames
+        fieldnames = ['name', 'price', 'profit']
+        reader = csv.DictReader(csvfile, fieldnames=fieldnames)
+        # Ignorer la première ligne (en-tête) car nous l'avons spécifiée manuellement
+        next(reader)
+        total_achat_action = 0
+        somme_total_action = 0  # Initialiser la somme totale à zéro
+
+        for row in reader:
+            nom_action = row['name']
+            prix_achat = row["price"]
+            prix_vente = row["profit"]
+            resultat = taux_de_rendement(prix_achat, prix_vente)
+            total_achat_action += 1  # Incrémenter le nombre total d'action
+            if prix_achat and not prix_achat.isspace() and prix_achat != "0":
+                
+             # Faire quelque chose avec prix_achat...
+                try:
+                    somme_total_action += float(prix_achat.replace(',', '.'))  # Ajouter le prix d'achat à la somme totale
+                except ValueError:
+                    logging.error(f"Erreur : Impossible de convertir le prix d'achat de l'action {nom_action} en float.")
+                    continue
+            logging.info(f"Action : {nom_action}, Taux de rendement : {resultat}%")
+
+        logging.info(f"Le nombre total d'actions est : {total_achat_action} action pour un montant total de {somme_total_action:.2f} euro")
+        # print(f"Pour le fichier {name_file}")
+
+# Exemple d'utilisation avec le fichier csv que vous avez fourni
+# name_file= 'dataset1'
+# chemin_du_fichier = f'/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/{name_file}.csv'
+# calculer_taux_de_rendement_fichier_csv(chemin_du_fichier)
+
+
+"""
+
+    Conclusion
+
+    Avec un calcule de une formule de taux de rendement 
+    On peut voir des erreurs 
+    Notamment qu'il y a des case nul qui on fait du profit wtf
+    + taux rendement negatif
+"""
+
+
+
+
+
+
+
+
