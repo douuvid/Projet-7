@@ -56,16 +56,6 @@ sum : Dans notre algorithme, nous utilisons la fonction sum()
 pour calculer la somme des coûts des actions et la somme des 
 bénéfices des actions dans une combinaison donnée
 
-
-
-
-Derniere partie 
-Chercher les algo pour le probleme sac a dos (ne pas utiliser l'algo glouton)
-Prend l'algo que j'ai le mieux compris +  verifie le temps + savoir l'explique 
-
-
-
-
 Soution Programmation dynamique pour le problème du sac à dos :
 La programmation dynamique consiste à diviser le problème en sous-problèmes plus petits,
 de manière récursive, et à mémoriser les résultats de chaque sous-problème pour éviter de 
@@ -79,35 +69,43 @@ mais peut être plus complexe à mettre en œuvre
 
 
 
+#logging.basicConfig(level=logging.DEBUG)
+
 
 
 def taux_de_rendement(prix_achat, prix_vente):
+    logging.info('Début du calcul du rendement.')
+
     if prix_achat is not None and prix_vente is not None:
+        logging.info('Les prix d\'achat et de vente sont fournis.')
+
         prix_achat_float = float(prix_achat.replace(',', '.')) 
         prix_vente_float = float(prix_vente.replace(',', '.')) 
 
+        logging.info(f'Prix d\'achat converti en float: {prix_achat_float}, Prix de vente converti en float: {prix_vente_float}')
+
         if prix_achat_float > 0:
             rendement = ((prix_vente_float - prix_achat_float) / prix_achat_float) * 100
+
+            logging.info(f'Rendement calculé: {rendement}')
+
             if rendement >= 0:
-                return f"Bon rendement chacal : {rendement}"
+                logging.info('Rendement positif.')
+                return f"Bon rendement chacal : {round(rendement)}🔥⬆️"
             else:
-                return f"Vous avez subi une perte de {abs(rendement):.2f}%"
+                logging.info('Rendement négatif.')
+                return f"Vous avez subi une perte de {abs(rendement):.2f}% 🥶⬇️"
         else:
+            logging.warning('Rendement impossible à calculer (prix d\'achat nul)')
             return "Rendement impossible à calculer (prix d'achat nul)"
     else:
-        return "Rendement impossible à calculer (données manquantes)"
+        logging.warning('Rendement impossible à calculer (fichier corrompus)')
+        return "Rendement impossible à calculer (fichier corrompus)"
+
     
     ##24 juillet 
-    ## Donner coromp faire comme ci exite pas de scase vide 
-    ## Mettre du log ==> si action  vide ou null printe ligne coromp
-    ## https://fr.wikipedia.org/wiki/Probl%C3%A8me_du_sac_%C3%A0_dos
-    ## la cap du sac c'est le budget
-    ##valeur ou poid = cout? a verifier 
-    ## colone = budget entier donc arrondir 
-    ## autant de ligne que d'actions
-    ## imple l'algo wiki sur mon py
-    
-    
+  
+
     
 def programmation_dynamique(actions, budget):
     nombre_actions = len(actions)  # On compte le nombre total d'actions
@@ -170,25 +168,24 @@ def calculer_taux_de_rendement_fichier_csv(nom_fichier):
             nom_action = row['name']
             prix_achat = row["price"]
             prix_vente = row["profit"]
-            resultat = taux_de_rendement(prix_achat, prix_vente)
-            total_achat_action += 1  # Incrémenter le nombre total d'action
-            if prix_achat and not prix_achat.isspace() and prix_achat != "0":
-                
-             # Faire quelque chose avec prix_achat...
-                try:
-                    somme_total_action += float(prix_achat.replace(',', '.'))  # Ajouter le prix d'achat à la somme totale
-                except ValueError:
-                    logging.error(f"Erreur : Impossible de convertir le prix d'achat de l'action {nom_action} en float.")
-                    continue
-            logging.info(f"Action : {nom_action}, Taux de rendement : {resultat}%")
+            
+            if prix_achat != "0":
+                resultat = taux_de_rendement(prix_achat, prix_vente)
+                print(f"Action : {nom_action}, Taux de rendement : {resultat}%")
+            else:
+                print(f"L'action {nom_action} a un prix d'achat de 0. Son taux de rendement n'est pas calculé.")
+            total_achat_action += 1
+            
+            try:
+                somme_total_action += float(prix_achat.replace(',', '.'))  # Ajouter le prix d'achat à la somme totale
+            except ValueError:
+                print(f"Erreur : Impossible de convertir le prix d'achat de l'action {nom_action} en float.")
+                continue
 
-        logging.info(f"Le nombre total d'actions est : {total_achat_action} action pour un montant total de {somme_total_action:.2f} euro")
+        print(f"Le nombre total d'actions est : {total_achat_action} action pour un montant total de {somme_total_action:.2f} euro")
         # print(f"Pour le fichier {name_file}")
 
-# Exemple d'utilisation avec le fichier csv que vous avez fourni
-# name_file= 'dataset1'
-# chemin_du_fichier = f'/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/{name_file}.csv'
-# calculer_taux_de_rendement_fichier_csv(chemin_du_fichier)
+
 
 
 """
@@ -200,11 +197,3 @@ def calculer_taux_de_rendement_fichier_csv(nom_fichier):
     Notamment qu'il y a des case nul qui on fait du profit wtf
     + taux rendement negatif
 """
-
-
-
-
-
-
-
-
