@@ -5,12 +5,12 @@ from itertools import product
 from collections import Counter
 
 actions = [
-    {"name": "Axa", "cost": 20, "benefice": 5},
-    {"name": "BNP", "cost": 30, "benefice": 10},
-    {"name": "LVMH", "cost": 50, "benefice": 15},
-    {"name":"Action-6" ,"cost" : 80,"benefice" : 2 },
+    {"name": "Axa", "cost": 20, "percent_benefit": 5},
+    {"name": "BNP", "cost": 30, "percent_benefit": 10},
+    {"name": "LVMH", "cost": 50, "percent_benefit": 15},
+    {"name":"Action-6" ,"cost" : 80,"percent_benefit" : 2 },
   
-  {"name":"Action-14" ,"cost" : 14,"benefice" : 1 }
+  {"name":"Action-14" ,"cost" : 14,"percent_benefit" : 1 }
 ]
 
 budget = 130
@@ -60,7 +60,7 @@ def calculate_total_benefit(portfolio_combinations):
     best_benefit = 0
     
     for combination in portfolio_combinations:
-        total_benefit = sum(action['benefice'] for action in combination)
+        total_benefit = sum(action['percent_benefit'] for action in combination)
         
         if total_benefit > best_benefit:
             best_combination = combination
@@ -104,11 +104,11 @@ if best_combination is not None:
     for i, action in enumerate(best_combination, 1):
         name = action['name']
         cost = action['cost']
-        benefice = action['benefice']
+        percent_benefit = action['percent_benefit']
         count = action_distribution[name][1]
         percentage = action_distribution[name][0]
         
-        print(f"Action {i} - Nom: {name}, Coût: {cost}, Bénéfice: {benefice}, "
+        print(f"Action {i} - Nom: {name}, Coût: {cost}, Bénéfice: {percent_benefit}, "
               f"Quantité: {count}, Pourcentage dans le portfeuille : {percentage}%")
     
     print(f"Bénéfice total : {best_benefit}")

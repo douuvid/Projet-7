@@ -1,35 +1,36 @@
 
+import time
 """
 Ceux.py se contente de trier le dictipnnaire 
 """
-from bruteforce import open_csv
+# import open_csv
 
-csv_="/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/data/datas_1.csv"
-open_csv(csv_)
+# csv_="/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/data/datas_1.csv"
+# open_csv(csv_)
 
 
 
 actions =[
-  {"name":"Action-1" ,"cost" : 20, "benefice" : 5 },
-  {"name":"Action-2" ,"cost" : 30, "benefice" : 10 }, 
-  {"name":"Action-3" ,"cost" : 50,"benefice" : 15 },
-  {"name":"Action-4" ,"cost" : 70,"benefice" : 20 },
-  {"name":"Action-5" ,"cost" : 60,"benefice" : 17 },
-  {"name":"Action-6" ,"cost" : 80,"benefice" : 25 },
-  {"name":"Action-7" ,"cost" : 22,"benefice" : 7 },
-  {"name":"Action-8" ,"cost" : 26,"benefice" : 11 },
-  {"name":"Action-9" ,"cost" : 48,"benefice" : 13 },
-  {"name":"Action-10" ,"cost" : 34,"benefice" : 27 },
-  {"name":"Action-11" ,"cost" : 42,"benefice" : 17 },
-  {"name":"Action-12" ,"cost" : 110, "benefice" : 9 },
-  {"name":"Action-13" ,"cost" : 38, "benefice" : 23 },
-  {"name":"Action-14" ,"cost" : 14,"benefice" : 1 },
-  {"name":"Action-15" ,"cost" : 18,"benefice" : 3 },
-  {"name":"Action-16" ,"cost" : 8,"benefice" : 8 },
-  {"name":"Action-17" ,"cost" : 4,"benefice" : 12 },
-  {"name":"Action-18" ,"cost" : 10,"benefice" : 14 },
-  {"name":"Action-19" ,"cost" : 24,"benefice" : 21 },
-  {"name":"Action-20" , "cost" : 114,"benefice" : 18 }
+  {"name":"Action-1" ,"cost" : 20, "percent_benefit" : 5 },
+  {"name":"Action-2" ,"cost" : 30, "percent_benefit" : 10 }, 
+  {"name":"Action-3" ,"cost" : 50,"percent_benefit" : 15 },
+  {"name":"Action-4" ,"cost" : 70,"percent_benefit" : 20 },
+  {"name":"Action-5" ,"cost" : 60,"percent_benefit" : 17 },
+  {"name":"Action-6" ,"cost" : 80,"percent_benefit" : 25 },
+  {"name":"Action-7" ,"cost" : 22,"percent_benefit" : 7 },
+  {"name":"Action-8" ,"cost" : 26,"percent_benefit" : 11 },
+  {"name":"Action-9" ,"cost" : 48,"percent_benefit" : 13 },
+  {"name":"Action-10" ,"cost" : 34,"percent_benefit" : 27 },
+  {"name":"Action-11" ,"cost" : 42,"percent_benefit" : 17 },
+  {"name":"Action-12" ,"cost" : 110, "percent_benefit" : 9 },
+  {"name":"Action-13" ,"cost" : 38, "percent_benefit" : 23 },
+  {"name":"Action-14" ,"cost" : 14,"percent_benefit" : 1 },
+  {"name":"Action-15" ,"cost" : 18,"percent_benefit" : 3 },
+  {"name":"Action-16" ,"cost" : 8,"percent_benefit" : 8 },
+  {"name":"Action-17" ,"cost" : 4,"percent_benefit" : 12 },
+  {"name":"Action-18" ,"cost" : 10,"percent_benefit" : 14 },
+  {"name":"Action-19" ,"cost" : 24,"percent_benefit" : 21 },
+  {"name":"Action-20" , "cost" : 114,"percent_benefit" : 18 }
     
 ]
 
@@ -41,14 +42,14 @@ Calcile le cout de la fonction apres 2 ans
 
 max_budget = 500
 
-def formule(actions):
+def formule_taux_benef(actions):
     results = []
     differences = [] 
     
     i = 1
     for action in actions:
         cost = action["cost"]
-        benefit = action["benefice"]
+        benefit = action["percent_benefit"]
         value = round(cost * (1 + benefit / 100), 2)
         difference = round(value - cost,2)
         result = f"L'action-{i} avec un cout : {cost}, à une valeur de : {value}  avec un taux : {benefit}%, pour un interet de {difference} euro"
@@ -61,7 +62,7 @@ def formule(actions):
 
 def action_plus_chere_avec_budget(actions, max_budget):
     resultat_action_plus_chere_avec_budget = []
-    resultats = formule(actions)
+    resultats = formule_taux_benef(actions)
     actions_triees = sorted(resultats[0], key=lambda x: float(x.split("valeur de : ")[1].split(" ")[0]), reverse=True)
 
     total_budget = 0
@@ -80,7 +81,7 @@ def action_plus_chere_avec_budget(actions, max_budget):
 
 def action_moins_chere_avec_budget(actions, max_budget):
     resultat_action_moins_chere = []
-    resultats = formule(actions)
+    resultats = formule_taux_benef(actions)
     actions_triees = sorted(resultats[0], key=lambda x: float(x.split("valeur de : ")[1].split(" ")[0]), reverse=True)
 
     total_budget = 0
@@ -99,26 +100,64 @@ def action_moins_chere_avec_budget(actions, max_budget):
 
 
 
-def action_plus_benef(actions):
-    actions_triees = sorted(actions, key=lambda x: x["benefice"], reverse=True)
+# def action_plus_benef(actions):
+#     actions_triees = sorted(actions, key=lambda x: x["percent_benefit"], reverse=True)
+#     resultat_action_plus_benef = []
+    
+#     for action in actions_triees:
+#         #if action <= budget restant  append 
+        
+#         #if action 
+#         resultat_action_plus_benef.append(f"L'action-{action['name']} a un bénéfice de {action['percent_benefit']}%")
+#     return resultat_action_plus_benef
+
+
+
+def action_plus_benef(actions, budget):
+    start_time = time.time()  # Temps de début d'exécution
+    
+    # Triez les actions par bénéfice en pourcentage, en ordre décroissant
+    actions_triees = sorted(actions, key=lambda x: x["percent_benefit"], reverse=True)
+    
+    # Liste pour stocker les actions que nous allons acheter
     resultat_action_plus_benef = []
+    total_cost = 0
+
     for action in actions_triees:
-        resultat_action_plus_benef.append(f"L'action-{action['name']} a un bénéfice de {action['benefice']}%")
+        
+        if total_cost + action["cost"] <= budget:
+            # Ajoutez l'action à notre liste d'actions à acheter
+            resultat_action_plus_benef.append(f"L'action-{action['name']} a un bénéfice de {action['percent_benefit']}%")
+            
+            # Ajoutez le coût de l'action au coût total
+            total_cost += action["cost"]
+    
+    end_time = time.time()  # Temps de fin d'exécution
+    execution_time = end_time - start_time  # Calcul du temps d'exécution
+    
+    print(f"Temps d'exécution : {execution_time:.6f} secondes")  # Affiche le temps d'exécution
+
+    # Retournez les actions que nous avons décidé d'acheter
     return resultat_action_plus_benef
 
 
+
+
+
+
+
 def action_moins_benef(actions):
-    actions_triees = sorted(actions, key=lambda x: x["benefice"])
+    actions_triees = sorted(actions, key=lambda x: x["percent_benefit"])
     resultat_action_moins_benef = []
     for action in actions_triees:
-        resultat_action_moins_benef.append(f"L'action-{action['name']} a un bénéfice de {action['benefice']}%")
+        resultat_action_moins_benef.append(f"L'action-{action['name']} a un bénéfice de {action['percent_benefit']}%")
     return resultat_action_moins_benef
 
 
 
 def calcul_rentabilite_action(prix_initial, taux_interet):
-    benefice = prix_initial * (1 + taux_interet) ** 2 - prix_initial
-    return benefice
+    percent_benefit = prix_initial * (1 + taux_interet) ** 2 - prix_initial
+    return percent_benefit
 
 
 
@@ -142,7 +181,7 @@ print("\nNombre d'actions pas chères :", len(actions_moins_cheres))
 
 # Liste des actions avec les bénéfices les plus élevés
 print("\nLa liste des actions avec les bénéfices les plus élevés :")
-actions_plus_benef = action_plus_benef(actions)
+actions_plus_benef = action_plus_benef(actions,max_budget)
 for action in actions_plus_benef:
     print(action)
 
