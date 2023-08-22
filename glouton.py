@@ -1,6 +1,7 @@
 import time
 
-
+#revoir big O pour expliquer la complexite des fonctions
+#Dans le PP mettre le spseudo code 
 def action_plus_benef(actions, budget):
     start_time = time.time()  # Temps de début d'exécution
     
@@ -19,6 +20,8 @@ def action_plus_benef(actions, budget):
             
             # Ajoutez le coût de l'action au coût total
             total_cost += action["cost"]
+            
+            #big 0: O (N = ACTION)
     
     end_time = time.time()  # Temps de fin d'exécution
     execution_time = end_time - start_time  # Calcul du temps d'exécution

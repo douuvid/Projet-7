@@ -34,6 +34,8 @@ for csv_name in csv_:
     csv_path = f"/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/data/{csv_name}.csv"
 
     result = open_csv(csv_path)
+    # si dans datas1 tu croise Share-ECAQ  prend son action et son profit
+    #
     resultats.append((csv_name, result))
 
 
@@ -63,10 +65,6 @@ actions = [
 max_budget = 500
 
 
-"""
-Calcile le cout de la fonction apres 2 ans 
-"""
-
 
 def formule(actions):
     results = []
@@ -86,10 +84,6 @@ results = formule(actions)
 sorted_results = sorted(results, key=lambda x: float(
     x.split("vaut : ")[1].split(" ")[0]), reverse=True)
 
-# for result in sorted_results:
-#     print(result)
-
-# Methode avec les action les plus chere
 
 
 def action_plus_chere_avec_budget(actions, max_budget):

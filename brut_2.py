@@ -132,12 +132,7 @@ def action_plus_benef(actions, budget):
             # Ajoutez le coût de l'action au coût total
             total_cost += action["cost"]
     
-    end_time = time.time()  # Temps de fin d'exécution
-    execution_time = end_time - start_time  # Calcul du temps d'exécution
-    
-    print(f"Temps d'exécution : {execution_time:.6f} secondes")  # Affiche le temps d'exécution
-
-    # Retournez les actions que nous avons décidé d'acheter
+   
     return resultat_action_plus_benef
 
 

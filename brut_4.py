@@ -1,11 +1,4 @@
 
-
-
-## Sur ses 3 action il y a 3 combi et 50 e de bud
-## Commencer par la 1er ligne
-# Ac 1 + 2
-# Ac 2
-# Ac 3
 from itertools import combinations
 
 actions = [

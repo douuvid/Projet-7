@@ -1,6 +1,17 @@
 from itertools import combinations
 import time
 
+
+
+#Dans la deuxime boucle for il faudrait savoir combien de cmbinaison possible avec le big o
+#et une fois qu'on a le nombre de combinaison on aura le nombre 
+
+# il faut connaitre le nombre de combinaison en fonction des combinaiso  avec le big o
+#dans quelle mesure elle, influenceren fonction des action (des entrees)
+# look sur tous les algo
+#la compexite big O = 2^N (n = nb d'action)
+
+
 def brute_force(actions, budget):
     if not isinstance(actions, list):
         return "Erreur : le paramètre 'actions' doit être une liste"

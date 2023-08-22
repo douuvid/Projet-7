@@ -4,26 +4,14 @@ import logging
 import time
 
 from brut_2 import action_plus_benef
+from glouton import action_plus_benef
 from brute_force import brute_force
 from optimized import optimized
 from version_dynamique import calculer_taux_de_rendement_fichier_csv
 
 logging.basicConfig(level=logging.DEBUG)
-# log error pour les fichier corrompu et afficher le pb
-# Qaund on sait pas si c'est une erreur ou pas mettre warning
-# Raise exeption quand c'est mort et qu'il faut arrete le traitement et renvoyer un cas d'erreur
-# Revoir les raise et les log
-# Finir le glouton
-# remettre au propre et mettre chaque algo par fichier
 
-# verifie le calcule des
-# remplacer les print par des logging
-
-
-# https://www.programiz.com/python-programming/examples/elapsed-time
-# Voir le temps sur force brut et glouton et comparer
-
-
+#
 actions = [
     {"name": "Action-1", "cost": 20, "percent_benefit": 5},
     {"name": "Action-2", "cost": 30, "percent_benefit": 10},
@@ -63,7 +51,7 @@ if __name__ == "__main__":
     solution, nombre_combi = brute_force(actions, budget)
     logging.debug(f"La meilleur solution est {solution} ")
     logging.info("Recherche de la meileur  combinaison")
-    logging.info("Recherche de la combinaison")
+    logging.info("Recherche de la meileur  combinaison")
     logging.debug(
         f"La meilleur combinaison  est {[action['name'] for action in solution[0]]}")
     # Rajouter le benf
@@ -76,7 +64,19 @@ if __name__ == "__main__":
     print(brute_force(actions, budget))
     end_time = time.time()
 
-    print("Time: ", end_time - start_time)
+    print("Time brute force : ", end_time - start_time)
+
+    start_time = time.time()
+    print(action_plus_benef(actions, budget))
+    end_time = time.time()
+
+    print("Time action_plus_benef : ", end_time - start_time)
+
+    start_time = time.time()
+    print(optimized(actions, budget))
+    end_time = time.time()
+
+    print("Time optimized : ", end_time - start_time)
 
     # for action in actions:
     #     total += action["cost"]
@@ -101,29 +101,9 @@ if __name__ == "__main__":
 
     print("")
     print("")
-    # resultat=action_plus_benef(actions,budget)
+    
 
 
-# for action in actions:
-#     total += action["cost"]
-#     benefiii += round(action["cost"] * (action["percent_benefit"] / 100), 10)
 
-#     print(f"Le coût de l'action {action['name']} est de {action['cost']} euro")
-#     print(f"Le bénéfice de l'action {action['name']} est de {round(action['cost'] * (action['percent_benefit'] / 100), 10)} euro")
-#     print()
-
-# print(f"Le coût de toutes les actions représente : {total} euro")
-# print(f"La valeur de tous les bénéfices représente : {round(benefiii,10)} euro")
-
-
-# meilleure_combinaison, max_benefit = optimized.py(actions, budget)
-
-# print("Meilleure combinaison d'actions :")
-# for action in meilleure_combinaison:
-#     print(action)
-# print(f"Bénéfice maximal : {max_benefit}")
-
-# name_file= 'dataset1'
-# chemin_du_fichier = f'/Users/davidravin/Desktop/Oρᥱᥒᥴᥣᥲssroom/Projet 7/{name_file}.csv'
-# print(f"pour le fichier {name_file}")
-# calculer_taux_de_rendement_fichier_csv(chemin_du_fichier)
+   
+   
