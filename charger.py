@@ -1,5 +1,7 @@
 import csv
 from optimized import optimized
+from brut import formule,action_plus_chere_avec_budget
+
 
 budget = 500
 
@@ -64,3 +66,59 @@ actions_achetees_sienna_1 = [
 ]
 for action in actions_achetees_sienna_1:
     print(action)
+ 
+ 
+#Pour la logique de S
+
+# resultat=formule(donnees_1)
+# for r in resultat:
+#     print(r)
+    
+# actions_plus_cheres_sienna = action_plus_chere_avec_budget(donnees_1, budget)
+# print("\nActions les plus chères avec le budget selon notre méthode :")
+# for action in actions_plus_cheres_sienna:
+#     print(action)
+
+
+
+
+
+
+
+# def actions_sienna(actions, liste_sienna_names):
+#     return [action for action in actions if action['name'] in liste_sienna_names]
+# def calcul_valeur_sienna(actions, liste_sienna_names):
+#     actions_sienna = [
+#         action for action in actions if action['name'] in liste_sienna_names]
+#     return formule(actions_sienna)
+
+
+# # Liste des noms des actions de Sienna
+# noms_sienna = ["Share-ECAQ",
+#                "Share-IXCI",
+#                "Share-FWBE",
+#                "Share-ZOFA",
+#                "Share-PLLK",
+#                "Share-YFVZ",
+#                "Share-ANFX",
+#                "Share-PATS",
+#                "Share-NDKR",
+#                "Share-ALIY",
+#                "Share-JWGF",
+#                "Share-JGTW",
+#                "Share-FAPS",
+#                "Share-VCAX",
+#                "Share-LFXB",
+#                "Share-DWSK",
+#                "Share-XQII",
+#                "Share-ROOM"]  
+
+# actions_choisies = actions_sienna(donnees_2, noms_sienna)
+
+# # Calculer et trier par rendement
+# actions_triees_par_rendement = sorted(actions_choisies, key=lambda x: x['percent_benefit'], reverse=True)
+
+# # Afficher les résultats
+# print("Actions choisies par Sienna, triées par rendement :")
+# for action in actions_triees_par_rendement:
+#     print(f"{action['name']} - Rendement: {action['percent_benefit']:.2f}%")
